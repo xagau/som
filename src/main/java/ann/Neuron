@@ -1,0 +1,156 @@
+package ann;
+
+import ann.af.ActivationFunction;
+import ann.af.ReLUActivationFunction;
+import ann.util.Unity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Neuron {
+    private int id = System.identityHashCode(this);
+    private List<Double> weights = new ArrayList<>();
+    private double bias;
+    private ActivationFunction activationFunction = new ReLUActivationFunction();
+    private List<Neuron> lastInputs = new ArrayList<>(); // Add this line
+    private List<Neuron> outputs = new ArrayList<>();
+    private double value = -1;
+    private double reward = 0;
+    private double error = 0;
+
+
+    public Neuron()
+    {
+
+    }
+
+    public Neuron(int id) {
+        this.setId(id);
+    }
+
+    public Neuron(Neuron neuron, double output) {
+        value = output;
+        lastInputs.add(neuron);
+    }
+
+    public Neuron(List<Double> weights, double bias, ActivationFunction activationFunction) {
+        this.setWeights(new ArrayList<>(weights));
+        this.setBias(bias);
+        this.activationFunction = activationFunction;
+        this.setOutputs(new ArrayList<>());
+    }
+
+    public void initializeWeights(int numberOfInputs) {
+        setWeights(new ArrayList<>());
+        for (int i = 0; i < numberOfInputs; i++) {
+            weights.add(Math.random()); // Set random weights between 0 and 1
+        }
+        setBias(Math.random()); // Set random bias between 0 and 1
+    }
+
+    public Neuron calculate(List<Neuron> inputs) {
+        this.setLastInputs(inputs); // Update lastInputs
+        double totalInput = getBias();
+
+        for (int i = 0; i < inputs.size(); i++) {
+            totalInput += getWeights().get(i) * inputs.get(i).getValue();
+        }
+
+        double output = activationFunction.activate(totalInput);
+        Neuron last = new Neuron();
+        last.setLastInputs(inputs);
+        last.setValue(Unity.unity(output, 1));
+        last.setBias(Unity.unity(totalInput,1));
+        Neuron s = new Neuron(last, output);
+        error = Math.abs(last.getError());
+        s.setError(error);
+        return s;
+    }
+
+
+
+    public void adjustWeightsAndBias(double newReward, double learningRate) {
+        if( getLastInputs() == null ){
+            return;
+        }
+        error = newReward - this.reward;
+        setBias(getBias() + learningRate * error);
+
+
+        for (int i = 0; i < getWeights().size(); i++) {
+            double input = getLastInputs().get(i).getValue(); // Use lastInputs
+            weights.set(i, weights.get(i) + learningRate * error * input);
+        }
+
+        this.reward = error;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Double> getWeights() {
+        return weights;
+    }
+
+    public void setWeights(List<Double> weights) {
+        this.weights = weights;
+    }
+
+    public double getBias() {
+        return bias;
+    }
+
+    public void setBias(double bias) {
+        this.bias = bias;
+    }
+
+    public List<Neuron> getOutputs() {
+        return outputs;
+    }
+
+    public void setOutputs(List<Neuron> outputs) {
+        this.outputs = outputs;
+    }
+
+    public List<Neuron> getLastInputs() {
+        return lastInputs;
+    }
+
+    public void setLastInputs(List<Neuron> lastInputs) {
+        this.lastInputs = lastInputs;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public double getReward() {
+        return reward;
+    }
+
+    public void setReward(double reward) {
+        this.reward = reward;
+    }
+
+    public double getError() {
+        return error;
+    }
+
+    public void setError(double error) {
+        this.error = error;
+    }
+
+    public static void main(String[] args)
+    {
+
+    }
+}
