@@ -12,7 +12,7 @@ To install and run this package, follow these steps:
    cd som
 
 
-##Build the Project:
+## Build the Project:
 Ensure you have Java Development Kit (JDK) installed. Then, compile the project using:
 
 bash
@@ -25,7 +25,7 @@ bash
 ```
     java -cp bin ann.Main
 ```
-##Usage
+## Usage
 
 The Main.java class demonstrates the basic setup and training process of the neural network. It includes:
 
@@ -34,14 +34,14 @@ The Main.java class demonstrates the basic setup and training process of the neu
     Setup of a brain with layers and kernels.
     Configuration and training of a reinforcement learning agent.
 
-##Key Components
+## Key Components
 
     Kernel: Processes inputs and converts them into neuron objects.
     NeuronLayer: Represents a layer of neurons with specified weights.
     MDP: Defines the environment for the RL agent.
     Agent: Performs actions in the MDP environment and learns from the rewards.
 
-##Example
+## Example
 
 Here's a brief example of how to set up and run the neural network:
 
@@ -90,7 +90,7 @@ public class Main {
 
 ```
 
-##Contributing
+## Contributing
 
 If you would like to contribute to this project, please follow these steps:
 
@@ -101,7 +101,7 @@ If you would like to contribute to this project, please follow these steps:
     Push to the branch (git push origin feature-branch).
     Open a pull request.
 
-##License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 Contact
